@@ -281,6 +281,7 @@ export default Backbone.View.extend({
   updateScript(view) {
     const model = view.model;
     const id = model.getId();
+    const js = this.model.get('js');
 
     if (!view.scriptContainer) {
       view.scriptContainer = $(`<div data-id="${id}">`);
@@ -289,6 +290,12 @@ export default Backbone.View.extend({
 
     view.el.id = id;
     view.scriptContainer.html('');
+
+    // Do not add javascript to canvas if js is falsy
+    if (!js) {
+      return;
+    }
+
     // In editor, I make use of setTimeout as during the append process of elements
     // those will not be available immediately, therefore 'item' variable
     const script = document.createElement('script');

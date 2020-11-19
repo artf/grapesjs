@@ -10,7 +10,8 @@ export default Backbone.Model.extend({
     rulers: false,
     zoom: 100,
     x: 0,
-    y: 0
+    y: 0,
+    js: true
   },
 
   initialize(config = {}) {
@@ -26,6 +27,7 @@ export default Backbone.Model.extend({
     this.set('frames', new Frames([frame], config));
     this.listenTo(this, 'change:zoom', this.onZoomChange);
     this.listenTo(em, 'change:device', this.updateDevice);
+    this.on('change:js', this.onJsChange);
   },
 
   updateDevice() {
@@ -42,5 +44,10 @@ export default Backbone.Model.extend({
   onZoomChange() {
     const zoom = this.get('zoom');
     zoom < 1 && this.set('zoom', 1);
+  },
+
+  onJsChange() {
+    const js = this.get('js');
+    this.get('frames').forEach(frame => frame.set({ js }));
   }
 });
